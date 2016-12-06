@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+	table, tr, td{
+		border: 1px solid black;
+	}
+
+	.fieldGroup, #tables, table, button {
+		margin: 50px;
+	}
+	</style>
+</head>
+<body> 
+ 
+<div class="fieldGroup">
+	<input type="radio" name="class" value="1024" id="a"> <label for="a">1024</label>
+	<input type="radio" name="class" value="1025" id="b"> <label for="b">1025</label>
+	<input type="radio" name="class" value="joined" id="c"> <label for="c">Joined Class</label>
+</div>
+
+<div class="fieldGroup">
+	<label for="rows"># of rows</label>
+	<input type="text" name="rows" id="rows"></input>
+</div>
+
+<div class="fieldGroup">
+	<label for="tableSeats">Number of seats at table?</label>
+	<input type="text" name="tableSeats" id="tableSeats"></input>
+	
+	<label for="rowNumber">Row Number?</label>
+	<input type="text" name="rowNumber" id="rowNumber"></input>
+
+	<button id="addTable">add table</button>
+</div>
+
+<div id="tables">
+	
+</div>
+
+<button id="drawRows">draw rows</button>
+<button id="drawTables">draw tables</button>
+
+<div id="results"></div> 
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script>
+
+var tables = [];
+
+students = [{name: "Jeffrey Chou", tier: 1, class: 1024 } , {name: "John Krug", tier: 1, class: 1024 } , {name: "Nuno Tavares", tier: 1, class: 1024 } , {name: "Raymond McCan", tier: 1, class: 1024 } , {name: "Rhyna Silva", tier: 1, class: 1024 } , {name: "Frank Villafane", tier: 2, class: 1024 } , {name: "Hero Khemchandani", tier: 2, class: 1024 } , {name: "Ishani Amin", tier: 2, class: 1024 } , {name: "John Molin", tier: 2, class: 1024 } , {name: "Nicholas Vincent", tier: 2, class: 1024 } , {name: "Steven Gissubel", tier: 2, class: 1024 } , {name: "Arron Linton", tier: 3, class: 1024 } , {name: "Douglas Wallner", tier: 3, class: 1024 } , {name: "John Bruno", tier: 3, class: 1024 } , {name: "Timothy King", tier: 3, class: 1024 } , {name: "Christa Hazel", tier: 4, class: 1024 } , {name: "Ivonne Komis", tier: 5, class: 1024 } , {name: "Krista Charner", tier: 5, class: 1024 } , {name: "Mark Sedlazek", tier: 5, class: 1024 } , {name: "Michael Yezo", tier: 5, class: 1024 } , {name: "Braniel Pichardo", tier: 5, class: 1024 } , {name: "Joey Rodrigues", tier: 5, class: 1024 } , {name: "Richard Rosius", tier: 5, class: 1024 } , {name: "Sheri Mathews", tier: 5, class: 1024 } , {name: "Tyler Rosen", tier: 5, class: 1024 } , {name: "Allen Chen", tier: 5, class: 1024 } , {name: "Alan Chu", tier: 1, class: 1025 } , {name: "Alex Rosenkranz", tier: 1, class: 1025 } , {name: "Alisa Schink", tier: 1, class: 1025 } , {name: "Andrew Federowicz", tier: 1, class: 1025 } , {name: "Christine Chong", tier: 1, class: 1025 } , {name: "Derick Alfaro", tier: 1, class: 1025 } , {name: "Kristen Manning", tier: 1, class: 1025 } , {name: "Sunita Chowdhury", tier: 1, class: 1025 } , {name: "Vincent Visconti", tier: 1, class: 1025 } , {name: "Ann Visconti", tier: 2, class: 1025 } , {name: "Anna Kimtis", tier: 2, class: 1025 } , {name: "Kathleen Catlett", tier: 2, class: 1025 } , {name: "Matt Stein", tier: 2, class: 1025 } , {name: "Michael Emmanuel", tier: 2, class: 1025 } , {name: "Anthony Carnese", tier: 3, class: 1025 } , {name: "Christopher Wahlers", tier: 3, class: 1025 } , {name: "Patrick Loughrey", tier: 3, class: 1025 } , {name: "Robert Benbenek", tier: 3, class: 1025 } , {name: "Jon Salamat", tier: 3, class: 1025 } , {name: "Thomas Li", tier: 3, class: 1025 } , {name: "Dennis hall jr" , tier: 4, class: 1025 } , {name: "Loretta Agyemang", tier: 4, class: 1025 } , {name: "Richard Spence", tier: 4, class: 1025 } , {name: "Shirley Liu", tier: 4, class: 1025 } , {name: "Brian Bennett", tier: 5, class: 1025 } ] 
+		
+	function drawRows(){
+		var table = $('<table>');
+		var rows = $('#rows').val()
+
+		for(var i = 1; i <= rows; i++){
+				var row = $('<tr>');
+				table.append(row);
+		}
+		$('#results').html(table);
+	}
+
+	function drawTables(){
+		for (var i=0; i<tables.length; i++){
+			
+			var tr = $('tr').eq(tables[i].rowNumber - 1)
+
+			var td = $('<td>').text("Seats: " + tables[i].seats);
+
+			tr.append(td);
+		}
+	}
+
+	// $( "input[name='class']" ).change(function(){
+	// 	var val = $(this).val();
+	// 	$('#results').text(val);
+	// });
+
+	$('#addTable').on('click', function(){
+		tables.push({
+			rowNumber : $( "input[name='rowNumber']" ).val(),
+			seats : $( "input[name='tableSeats']" ).val()
+		})
+
+		$('#tables').text(JSON.stringify(tables));
+	});
+
+	$('#drawRows').on('click', function(){
+		drawRows();
+	});
+
+	$('#drawTables').on('click', function(){
+		drawTables();
+	});
+	
+
+</script> 
+</body>
+</html>
