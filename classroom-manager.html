@@ -2,99 +2,318 @@
 <html>
 <head>
 	<title></title>
-	<style type="text/css">
-	table, tr, td{
-		border: 1px solid black;
+<style type="text/css">
+	.left {
+		float: left;
 	}
 
-	.fieldGroup, #tables, table, button {
-		margin: 50px;
+	#menu {
+		margin: 100px;
+		width: 200px;
 	}
-	</style>
+
+	.right {
+		float: right;
+		width: 1100px;
+	}
+
+	.row {
+		border: 2px solid black;
+		height: 250px;
+	}
+
+	.table {
+		border: 1px solid green;
+		margin: 10px;
+	}
+
+	.absent {
+		background-color : red;
+	}
+
+	.present {
+		background-color : #90EE90;
+	}
+
+	[class="1024"] {
+		background-color: #42dcf4
+	}
+
+	[class="1025"] {
+		background-color: #f44274
+	}
+
+	[class="6"] {
+		background-color: #000000;
+	}
+
+	[class="5"] {
+		background-color:  #663300
+	}
+
+	[class="4"] {
+		background-color: #994d00
+	}
+
+	[class="3"] {
+		background-color: #cc6600
+	}
+
+	[class="2"] {
+		background-color: #ff8000
+	}
+
+	[class="1"] {
+		background-color: #ffb366
+	}
+
+	[class="1"], [class="2"], [class="3"], [class="4"], [class="5"], [class="6"] {
+		color: white;
+	}
+
+	[class="1"], [class="2"], [class="3"], [class="4"], [class="5"], [class="6"], [class="1024"], [class="1025"], .absent, .present {
+		padding: 10px;
+	}
+</style>
 </head>
 <body> 
+
+<div id="classRoom">
+
+	<div class="left">
+		<table class="clear">
+			<thead>
+				<tr>
+					<th>name</th>
+					<th>tier</th>
+					<th>class</th>
+					<th>present?</th>
+				</tr>
+			</thead>
+
+			<tbody data-bind="foreach: sortStudents">
+				<tr>
+					<td data-bind='attr: { class: tier }, text: name'></td>
+					<td><input type="number" data-bind='value: tier'></td>
+					<td data-bind='attr: { class: clas }, text: clas'></td>
+
+					<td><button data-bind="css: { absent: !present(), present: present()}, click: $parent.togglePresence">
+						<span data-bind="text: present() ? 'yes' : 'no' "></span>
+					</button></td>
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="left">
+		<div id="menu">
+
+			<label><input type="radio" value="1024" data-bind="checked: radioClass" />Class: 1024</label>
+			<label><input type="radio" value="1025" data-bind="checked: radioClass" />Class: 1025</label>
+			<label><input type="radio" value="both" data-bind="checked: radioClass" />both classes</label>
+
+			<br><br>
+
+			<button data-bind='click: addRow'>Add a row</button>
+			<button data-bind='click: placeStudents'>w2w s2s</button>
+			<button data-bind='click: cleanView'>toggle clean look</button>
+		</div>
+
+		<div data-bind="foreach: rows">
+			<div class="row">
+				<a class="clear" href='#' data-bind='click: $root.removeRow'>Remove Row</a>
+
+				<a class="clear" href='#' data-bind='click: $root.addTable'>Add table</a>
+
+			    <div data-bind="foreach: tables">
+			        <div class="left table">
+			            <input class="clear" data-bind='value: seats' />
+			            <a class="clear" href='#' data-bind='click: $root.removeTable'>Remove Table</a>
+			            <br><br>
+		            	<ul data-bind="foreach: sittingStudents">
+		            		<li data-bind="text: name"></li>
+		            	</ul>
+			        </div>
+			    </div>
+		    </div>
+		
+		</div>
+	</div>
+
+</div>
  
-<div class="fieldGroup">
-	<input type="radio" name="class" value="1024" id="a"> <label for="a">1024</label>
-	<input type="radio" name="class" value="1025" id="b"> <label for="b">1025</label>
-	<input type="radio" name="class" value="joined" id="c"> <label for="c">Joined Class</label>
-</div>
-
-<div class="fieldGroup">
-	<label for="rows"># of rows</label>
-	<input type="text" name="rows" id="rows"></input>
-</div>
-
-<div class="fieldGroup">
-	<label for="tableSeats">Number of seats at table?</label>
-	<input type="text" name="tableSeats" id="tableSeats"></input>
-	
-	<label for="rowNumber">Row Number?</label>
-	<input type="text" name="rowNumber" id="rowNumber"></input>
-
-	<button id="addTable">add table</button>
-</div>
-
-<div id="tables">
-	
-</div>
-
-<button id="drawRows">draw rows</button>
-<button id="drawTables">draw tables</button>
-
-<div id="results"></div> 
 
 <script src="https://code.jquery.com/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+
 <script>
 
-var tables = [];
+students = [
+	{name: "Jeffrey Chou", tier: 1, clas: 1024 },
+	{name: "John Krug", tier: 1, clas: 1024 },
+	{name: "Nuno Tavares", tier: 1, clas: 1024 },
+	{name: "Raymond McCan", tier: 1, clas: 1024 },
+	{name: "Rhyna Silva", tier: 1, clas: 1024 },
+	{name: "Frank Villafane", tier: 2, clas: 1024 },
+	{name: "Hero Khemchandani", tier: 2, clas: 1024 },
+	{name: "Ishani Amin", tier: 2, clas: 1024 },
+	{name: "John Molin", tier: 2, clas: 1024 },
+	{name: "Nicholas Vincent", tier: 2, clas: 1024 },
+	{name: "Steven Gissubel", tier: 2, clas: 1024 },
+	{name: "Arron Linton", tier: 3, clas: 1024 },
+	{name: "Douglas Wallner", tier: 3, clas: 1024 },
+	{name: "John Bruno", tier: 3, clas: 1024 },
+	{name: "Timothy King", tier: 3, clas: 1024 },
+	{name: "Christa Hazel", tier: 4, clas: 1024 },
+	{name: "Ivonne Komis", tier: 5, clas: 1024 },
+	{name: "Krista Charner", tier: 5, clas: 1024 },
+	{name: "Mark Sedlazek", tier: 5, clas: 1024 },
+	{name: "Michael Yezo", tier: 5, clas: 1024 },
+	{name: "Braniel Pichardo", tier: 5, clas: 1024 },
+	{name: "Joey Rodrigues", tier: 5, clas: 1024 },
+	{name: "Richard Rosius", tier: 5, clas: 1024 },
+	{name: "Sheri Mathews", tier: 5, clas: 1024 },
+	{name: "Tyler Rosen", tier: 5, clas: 1024 },
+	{name: "Allen Chen", tier: 5, clas: 1024 },
+	{name: "Alan Chu", tier: 1, clas: 1025 },
+	{name: "Alex Rosenkranz", tier: 1, clas: 1025 },
+	{name: "Alisa Schink", tier: 1, clas: 1025 },
+	{name: "Andrew Federowicz", tier: 1, clas: 1025 },
+	{name: "Christine Chong", tier: 1, clas: 1025 },
+	{name: "Derick Alfaro", tier: 1, clas: 1025 },
+	{name: "Kristen Manning", tier: 1, clas: 1025 },
+	{name: "Sunita Chowdhury", tier: 1, clas: 1025 },
+	{name: "Vincent Visconti", tier: 1, clas: 1025 },
+	{name: "Ann Visconti", tier: 2, clas: 1025 },
+	{name: "Anna Kimtis", tier: 2, clas: 1025 },
+	{name: "Kathleen Catlett", tier: 2, clas: 1025 },
+	{name: "Matt Stein", tier: 2, clas: 1025 },
+	{name: "Michael Emmanuel", tier: 2, clas: 1025 },
+	{name: "Anthony Carnese", tier: 3, clas: 1025 },
+	{name: "Christopher Wahlers", tier: 3, clas: 1025 },
+	{name: "Patrick Loughrey", tier: 3, clas: 1025 },
+	{name: "Robert Benbenek", tier: 3, clas: 1025 },
+	{name: "Jon Salamat", tier: 3, clas: 1025 },
+	{name: "Thomas Li", tier: 3, clas: 1025 },
+	{name: "Dennis hall jr" , tier: 4, clas: 1025 },
+	{name: "Loretta Agyemang", tier: 4, clas: 1025 },
+	{name: "Richard Spence", tier: 4, clas: 1025 },
+	{name: "Shirley Liu", tier: 4, clas: 1025 },
+	{name: "Brian Bennett", tier: 6, clas: 1025 } 
+] 
 
-students = [{name: "Jeffrey Chou", tier: 1, class: 1024 } , {name: "John Krug", tier: 1, class: 1024 } , {name: "Nuno Tavares", tier: 1, class: 1024 } , {name: "Raymond McCan", tier: 1, class: 1024 } , {name: "Rhyna Silva", tier: 1, class: 1024 } , {name: "Frank Villafane", tier: 2, class: 1024 } , {name: "Hero Khemchandani", tier: 2, class: 1024 } , {name: "Ishani Amin", tier: 2, class: 1024 } , {name: "John Molin", tier: 2, class: 1024 } , {name: "Nicholas Vincent", tier: 2, class: 1024 } , {name: "Steven Gissubel", tier: 2, class: 1024 } , {name: "Arron Linton", tier: 3, class: 1024 } , {name: "Douglas Wallner", tier: 3, class: 1024 } , {name: "John Bruno", tier: 3, class: 1024 } , {name: "Timothy King", tier: 3, class: 1024 } , {name: "Christa Hazel", tier: 4, class: 1024 } , {name: "Ivonne Komis", tier: 5, class: 1024 } , {name: "Krista Charner", tier: 5, class: 1024 } , {name: "Mark Sedlazek", tier: 5, class: 1024 } , {name: "Michael Yezo", tier: 5, class: 1024 } , {name: "Braniel Pichardo", tier: 5, class: 1024 } , {name: "Joey Rodrigues", tier: 5, class: 1024 } , {name: "Richard Rosius", tier: 5, class: 1024 } , {name: "Sheri Mathews", tier: 5, class: 1024 } , {name: "Tyler Rosen", tier: 5, class: 1024 } , {name: "Allen Chen", tier: 5, class: 1024 } , {name: "Alan Chu", tier: 1, class: 1025 } , {name: "Alex Rosenkranz", tier: 1, class: 1025 } , {name: "Alisa Schink", tier: 1, class: 1025 } , {name: "Andrew Federowicz", tier: 1, class: 1025 } , {name: "Christine Chong", tier: 1, class: 1025 } , {name: "Derick Alfaro", tier: 1, class: 1025 } , {name: "Kristen Manning", tier: 1, class: 1025 } , {name: "Sunita Chowdhury", tier: 1, class: 1025 } , {name: "Vincent Visconti", tier: 1, class: 1025 } , {name: "Ann Visconti", tier: 2, class: 1025 } , {name: "Anna Kimtis", tier: 2, class: 1025 } , {name: "Kathleen Catlett", tier: 2, class: 1025 } , {name: "Matt Stein", tier: 2, class: 1025 } , {name: "Michael Emmanuel", tier: 2, class: 1025 } , {name: "Anthony Carnese", tier: 3, class: 1025 } , {name: "Christopher Wahlers", tier: 3, class: 1025 } , {name: "Patrick Loughrey", tier: 3, class: 1025 } , {name: "Robert Benbenek", tier: 3, class: 1025 } , {name: "Jon Salamat", tier: 3, class: 1025 } , {name: "Thomas Li", tier: 3, class: 1025 } , {name: "Dennis hall jr" , tier: 4, class: 1025 } , {name: "Loretta Agyemang", tier: 4, class: 1025 } , {name: "Richard Spence", tier: 4, class: 1025 } , {name: "Shirley Liu", tier: 4, class: 1025 } , {name: "Brian Bennett", tier: 5, class: 1025 } ] 
-		
-	function drawRows(){
-		var table = $('<table>');
-		var rows = $('#rows').val()
+for (var i=0; i<students.length; i++){
+	students[i].present = true;
+}
 
-		for(var i = 1; i <= rows; i++){
-				var row = $('<tr>');
-				table.append(row);
-		}
-		$('#results').html(table);
+var classRoomModel = function(stds) {
+	var self = this;
+	self.students = ko.observableArray(ko.utils.arrayMap(stds, function(st) {
+	    return { name: st.name, tier: ko.observable(st.tier), clas: st.clas, present: ko.observable(st.present) };
+	}));
+
+	self.radioClass = ko.observable("both");
+
+	this.studentsToShow = ko.pureComputed(function() {
+	    // Represents a filtered list of students
+	    // i.e., only those matching the "typeToShow" condition
+	    var clas = this.radioClass();
+	    if (clas == "both") return this.students();
+	    return ko.utils.arrayFilter(this.students(), function(stud) {
+	        return stud.clas == clas;
+	    });
+	}, this);
+
+	self.sortFunction = function(a, b) {
+	    return a.tier() > b.tier() ? 1 : -1;  
+	};
+
+	//filter students based on class and tier
+	self.sortStudents = ko.computed(function() {
+		var clasFil = this.radioClass();
+
+	    if (clasFil == "both") {
+	    	return this.students.slice().sort(this.sortFunction);
+	    }
+
+    	var studs = ko.utils.arrayFilter(this.students(), function(st) {
+            return st.clas == clasFil;
+        });
+
+        return studs.slice().sort(this.sortFunction);
+	    
+	}, self);
+	                     
+	self.rows = ko.observableArray();
+
+	self.addRow = function() {
+	    self.rows.push({
+	        tables: ko.observableArray()
+	    });
+	};
+
+	self.addTable = function(row) {
+	    row.tables.push({
+	        seats: 4,
+	        sittingStudents: ko.observableArray()
+	    });
+	};
+
+	self.removeRow = function(row){
+		self.rows.remove(row);
 	}
 
-	function drawTables(){
-		for (var i=0; i<tables.length; i++){
-			
-			var tr = $('tr').eq(tables[i].rowNumber - 1)
-
-			var td = $('<td>').text("Seats: " + tables[i].seats);
-
-			tr.append(td);
-		}
+	self.removeTable = function(table){
+		$.each(self.rows(), function() { this.tables.remove(table) })
 	}
 
-	// $( "input[name='class']" ).change(function(){
-	// 	var val = $(this).val();
-	// 	$('#results').text(val);
-	// });
+	self.togglePresence = function(student){
+		student.present(!student.present())
+	}
 
-	$('#addTable').on('click', function(){
-		tables.push({
-			rowNumber : $( "input[name='rowNumber']" ).val(),
-			seats : $( "input[name='tableSeats']" ).val()
-		})
+	//this is where we will place students to tables
+	self.placeStudents = function(){
+		var self = this;
 
-		$('#tables').text(JSON.stringify(tables));
-	});
+		self.rows().forEach(function(row,i){
+			//console.log(row, i, 'row')
+			if (row.tables().length > 0){
+				row.tables().forEach(function(table, j){
+					//console.log(table, j, 'table')
+					//place the max amount of students at this table
+					var seatCount = 0;
 
-	$('#drawRows').on('click', function(){
-		drawRows();
-	});
+					while(seatCount != table.seats){
+						var ranStud = self.students()[Math.floor(Math.random()*self.students().length)];
 
-	$('#drawTables').on('click', function(){
-		drawTables();
-	});
-	
+						table.sittingStudents.push(ranStud);
+
+						console.log(table);
+						//console.log(table.seats, 'seats');
+						// this.students().forEach(function(student, k){
+						// 	var tier = student().tier;
+						// 	table.sittingStudents.push(student)
+						// });
+						seatCount++;
+					}
+				});
+			}
+		});
+
+		//debugger; 
+		//shows students at the tables:
+		//this.rows()[0].tables()[0].sittingStudents()
+	}
+
+	self.cleanView = function(){
+		$('.clear').toggle();
+	}
+
+};
+
+ko.applyBindings(new classRoomModel(students), document.querySelector('#classRoom'));
+
 
 </script> 
 </body>
