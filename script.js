@@ -1,3 +1,4 @@
+///*
 students = [
 	{name: "Jeffrey Chou", tier: 1, clas: 1024 },
 	{name: "John Krug", tier: 1, clas: 1024 },
@@ -51,6 +52,19 @@ students = [
 	{name: "Shirley Liu", tier: 4, clas: 1025 },
 	{name: "Brian Bennett", tier: 6, clas: 1025 } 
 ] 
+//*/
+
+// students = [
+// 	{name: "Jeffrey Chou", tier: 1, clas: 1024 },
+// 	{name: "John Krug", tier: 1, clas: 1024 },
+// 	{name: "Nuno Tavares", tier: 1, clas: 1024 },
+// 	{name: "Raymond McCan", tier: 1, clas: 1024 },
+// 	{name: "Rhyna Silva", tier: 1, clas: 1024 },
+// 	{name: "Frank Villafane", tier: 2, clas: 1024 },
+// 	{name: "Hero Khemchandani", tier: 2, clas: 1024 },
+// 	{name: "Ishani Amin", tier: 2, clas: 1024 },
+// ]
+
 
 for (var i=0; i<students.length; i++){
 	students[i].present = true;
@@ -64,7 +78,7 @@ var classRoomModel = function(stds) {
 
 	self.radioClass = ko.observable("both");
 
-	this.studentsToShow = ko.pureComputed(function() {
+	self.studentsToShow = ko.pureComputed(function() {
 	    // Represents a filtered list of students
 	    // i.e., only those matching the "typeToShow" condition
 	    var clas = this.radioClass();
@@ -92,6 +106,25 @@ var classRoomModel = function(stds) {
 
         return studs.slice().sort(this.sortFunction);
 	    
+	}, self);
+
+	//filter students based on presence and radioClass filter
+	self.studentLength = ko.computed(function(){
+		var clasFil = this.radioClass();
+		var counter = 0;
+
+		if (clasFil == "both") {
+
+			this.students().forEach(function(stud, i){
+				if (stud.present()) counter++;
+			});
+		}else {
+			this.students().forEach(function(stud, i){
+				if (stud.present() && stud.clas == clasFil) counter++;
+			});
+		}
+
+		return counter;
 	}, self);
 	                     
 	self.rows = ko.observableArray();
@@ -126,34 +159,34 @@ var classRoomModel = function(stds) {
 		var self = this;
 		var students = [];
 
+		//visually clear the tables
+		$('.left .table').children('ul').children('li').remove();
+		var clas = this.radioClass();
+
 		self.rows().forEach(function(row,i){
 			//console.log(row, i, 'row')
 			if (row.tables().length > 0){
 				row.tables().forEach(function(table, j){
-					//console.log(table, j, 'table')
-					//place the max amount of students at this table
-					var seatCount = 1;
+					if (students.length != self.studentLength()){
+						//console.log(table, j, 'table')
+						//place the max amount of students at this table
+						var seatCount = 1;
 
-					while(seatCount <= table.seats){
-						//get any random student
-						var ranStud = self.students()[Math.floor(Math.random()*self.students().length)];
+						while(seatCount <= table.seats){
+							//get any random student - very inefficient - especially as we get closer to the end
+							var ranStud = self.students()[Math.floor(Math.random()*self.students().length)];
 
-						//if student present and the student hasn't been placed somewhere
-						//account for class filter
-						debugger;
-						if ((ranStud.present() == true) && (students.indexOf(ranStud.name) == -1)){
-							console.log('in here')
-							table.sittingStudents.push(ranStud);
-							students.push(ranStud.name);
-						}
+							var tier = ranStud.tier;
 
-						//console.log(table);
-						//console.log(table.seats, 'seats');
-						// this.students().forEach(function(student, k){
-						// 	var tier = student().tier;
-						// 	table.sittingStudents.push(student)
-						// });
-						seatCount++;
+							//if student present and the student hasn't been placed somewhere
+							//account for class filter
+							if ((ranStud.present() == true) && (students.indexOf(ranStud.name) == -1) && (ranStud.clas == clas)){
+								console.log('in here')
+								table.sittingStudents.push(ranStud);
+								students.push(ranStud.name);
+								seatCount++;
+							}
+						}						
 					}
 				});
 			}
