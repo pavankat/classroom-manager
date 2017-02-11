@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery to Knockout.js</title>
+</head>
+<body>
+<p>I want two inputs</p>
+
+<p>and when the value in them changes</p>
+
+<p>change the h1 value to be both the inputs added together.</p>
+
+<h1 id="header"></h1>
+
+<input id="firstInput"></input>
+<input id="secondInput"></input>
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script type="text/javascript">
+	$('#header').text('jQuery Example');
+
+	$('#firstInput, #secondInput').on('change', function(){
+		$('#header').text($('#firstInput').val() + " " + $('#secondInput').val());
+	});
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
