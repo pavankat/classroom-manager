@@ -1,70 +1,21 @@
-///*
 students = [
-	{name: "Jeffrey Chou", tier: 1, clas: 1024 },
-	{name: "John Krug", tier: 1, clas: 1024 },
-	{name: "Nuno Tavares", tier: 1, clas: 1024 },
-	{name: "Raymond McCan", tier: 1, clas: 1024 },
-	{name: "Rhyna Silva", tier: 1, clas: 1024 },
-	{name: "Frank Villafane", tier: 2, clas: 1024 },
-	{name: "Hero Khemchandani", tier: 2, clas: 1024 },
-	{name: "Ishani Amin", tier: 2, clas: 1024 },
-	{name: "John Molin", tier: 2, clas: 1024 },
-	{name: "Nicholas Vincent", tier: 2, clas: 1024 },
-	{name: "Steven Gissubel", tier: 2, clas: 1024 },
-	{name: "Arron Linton", tier: 3, clas: 1024 },
-	{name: "Douglas Wallner", tier: 3, clas: 1024 },
-	{name: "John Bruno", tier: 3, clas: 1024 },
-	{name: "Timothy King", tier: 3, clas: 1024 },
-	{name: "Christa Hazel", tier: 4, clas: 1024 },
-	{name: "Ivonne Komis", tier: 5, clas: 1024 },
-	{name: "Krista Charner", tier: 5, clas: 1024 },
-	{name: "Mark Sedlazek", tier: 5, clas: 1024 },
-	{name: "Michael Yezo", tier: 5, clas: 1024 },
-	{name: "Braniel Pichardo", tier: 5, clas: 1024 },
-	{name: "Joey Rodrigues", tier: 5, clas: 1024 },
-	{name: "Richard Rosius", tier: 5, clas: 1024 },
-	{name: "Sheri Mathews", tier: 5, clas: 1024 },
-	{name: "Tyler Rosen", tier: 5, clas: 1024 },
-	{name: "Allen Chen", tier: 5, clas: 1024 },
-	{name: "Alan Chu", tier: 1, clas: 1025 },
-	{name: "Alex Rosenkranz", tier: 1, clas: 1025 },
-	{name: "Alisa Schink", tier: 1, clas: 1025 },
-	{name: "Andrew Federowicz", tier: 1, clas: 1025 },
-	{name: "Christine Chong", tier: 1, clas: 1025 },
-	{name: "Derick Alfaro", tier: 1, clas: 1025 },
-	{name: "Kristen Manning", tier: 1, clas: 1025 },
-	{name: "Sunita Chowdhury", tier: 1, clas: 1025 },
-	{name: "Vincent Visconti", tier: 1, clas: 1025 },
-	{name: "Ann Visconti", tier: 2, clas: 1025 },
-	{name: "Anna Kimtis", tier: 2, clas: 1025 },
-	{name: "Kathleen Catlett", tier: 2, clas: 1025 },
-	{name: "Matt Stein", tier: 2, clas: 1025 },
-	{name: "Michael Emmanuel", tier: 2, clas: 1025 },
-	{name: "Anthony Carnese", tier: 3, clas: 1025 },
-	{name: "Christopher Wahlers", tier: 3, clas: 1025 },
-	{name: "Patrick Loughrey", tier: 3, clas: 1025 },
-	{name: "Robert Benbenek", tier: 3, clas: 1025 },
-	{name: "Jon Salamat", tier: 3, clas: 1025 },
-	{name: "Thomas Li", tier: 3, clas: 1025 },
-	{name: "Dennis hall jr" , tier: 4, clas: 1025 },
-	{name: "Loretta Agyemang", tier: 4, clas: 1025 },
-	{name: "Richard Spence", tier: 4, clas: 1025 },
-	{name: "Shirley Liu", tier: 4, clas: 1025 },
-	{name: "Brian Bennett", tier: 6, clas: 1025 } 
+	{name: "Clark Kent", tier: 1, clas: 1024 },
+	{name: "Trent Richardson", tier: 1, clas: 1024 },
+	{name: "Naruto", tier: 2, clas: 1024 },
+	{name: "Meeses", tier: 2, clas: 1024 },
+	{name: "Bobbi", tier: 3, clas: 1024 },
+	{name: "Franky Cleaners", tier: 4, clas: 1024 },
+	{name: "Rocky", tier: 4, clas: 1024 },
+	{name: "Supra", tier: 5, clas: 1024 },
+	{name: "YoYo Bro", tier: 6, clas: 1024 },
+	{name: "Linky", tier: 6, clas: 1024 },
+	{name: "Albert", tier: 1, clas: 1025 },
+	{name: "Peleke", tier: 2, clas: 1025 },
+	{name: "Lisa", tier: 3, clas: 1025 },
+	{name: "Kaly", tier: 3, clas: 1025 },
+	{name: "Zack Morris", tier: 4, clas: 1025 },
+	{name: "AC Slater", tier: 6, clas: 1025 }
 ] 
-//*/
-
-// students = [
-// 	{name: "Jeffrey Chou", tier: 1, clas: 1024 },
-// 	{name: "John Krug", tier: 1, clas: 1024 },
-// 	{name: "Nuno Tavares", tier: 1, clas: 1024 },
-// 	{name: "Raymond McCan", tier: 1, clas: 1024 },
-// 	{name: "Rhyna Silva", tier: 1, clas: 1024 },
-// 	{name: "Frank Villafane", tier: 2, clas: 1024 },
-// 	{name: "Hero Khemchandani", tier: 2, clas: 1024 },
-// 	{name: "Ishani Amin", tier: 2, clas: 1024 },
-// ]
-
 
 for (var i=0; i<students.length; i++){
 	students[i].present = true;
@@ -110,6 +61,7 @@ var classRoomModel = function(stds) {
 
 	//filter students based on presence and radioClass filter
 	self.studentLength = ko.computed(function(){
+		debugger;
 		var clasFil = this.radioClass();
 		var counter = 0;
 
@@ -124,6 +76,7 @@ var classRoomModel = function(stds) {
 			});
 		}
 
+		debugger;
 		return counter;
 	}, self);
 	                     
@@ -167,6 +120,7 @@ var classRoomModel = function(stds) {
 			//console.log(row, i, 'row')
 			if (row.tables().length > 0){
 				row.tables().forEach(function(table, j){
+					debugger;
 					if (students.length != self.studentLength()){
 						//console.log(table, j, 'table')
 						//place the max amount of students at this table
@@ -176,11 +130,12 @@ var classRoomModel = function(stds) {
 							//get any random student - very inefficient - especially as we get closer to the end
 							var ranStud = self.students()[Math.floor(Math.random()*self.students().length)];
 
-							var tier = ranStud.tier;
+							var tier = ranStud.tier();
 
 							//if student present and the student hasn't been placed somewhere
 							//account for class filter
 							if ((ranStud.present() == true) && (students.indexOf(ranStud.name) == -1) && (ranStud.clas == clas)){
+								debugger;
 								console.log('in here')
 								table.sittingStudents.push(ranStud);
 								students.push(ranStud.name);
